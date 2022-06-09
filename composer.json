@@ -1,0 +1,16 @@
+{
+    "name": "promorepublic/media-storage-sdk",
+    "description": "A client for the media-storage service",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Promorepublic\\MediaStorage\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.4|^8.0",
+        "symfony/http-client": "^5.3",
+        "ext-json": "*"
+    }
+}
