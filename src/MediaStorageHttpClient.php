@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Promorepublic\MediaStorage;
 
 use Promorepublic\MediaStorage\Shared\MediaStorageHttpClientConfigurationBag;
-use Promorepublic\MediaStorage\Shared\MediaUrl;
+use Promorepublic\MediaStorage\Shared\MediaPath;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -34,16 +34,16 @@ final class MediaStorageHttpClient
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      */
-    public function uploadFacebookImage(string $url): MediaUrl
+    public function uploadFacebookImage(string $url): MediaPath
     {
         $response = $this->httpClient->request(
             'POST',
             $this->configurationBag->mediaStorageUrl . "/$this->uploadEndpoint",
             [
-                'body' => ['url' => $url],
+                'json' => ['url' => $url],
             ]
         );
 
-        return new MediaUrl(json_decode($response->getContent(), true));
+        return new MediaPath(json_decode($response->getContent(), true));
     }
 }

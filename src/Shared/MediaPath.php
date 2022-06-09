@@ -2,7 +2,7 @@
 
 namespace Promorepublic\MediaStorage\Shared;
 
-final class MediaUrl
+final class MediaPath
 {
     public string $url;
 
