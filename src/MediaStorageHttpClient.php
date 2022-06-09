@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Promorepublic\MediaStorage;
 
+use Promorepublic\MediaStorage\Shared\MediaStorageHttpClientConfigurationBag;
 use Promorepublic\MediaStorage\Shared\MediaUrl;
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class MediaStorageHttpClient
@@ -13,12 +15,17 @@ final class MediaStorageHttpClient
 
     private HttpClientInterface $httpClient;
 
-    private string $mediaStorageUrl;
+    private MediaStorageHttpClientConfigurationBag $configurationBag;
 
-    public function __construct(HttpClientInterface $httpClient, string $mediaStorageUrl = "0.0.0.0:8000")
+    public function __construct(MediaStorageHttpClientConfigurationBag $configurationBag)
     {
-        $this->httpClient = $httpClient;
-        $this->mediaStorageUrl = $mediaStorageUrl;
+        $this->configurationBag = $configurationBag;
+
+        $this->httpClient = HttpClient::create([
+            'headers' => [
+                'x-api-key' => $configurationBag->apiKey,
+            ]
+        ]);
     }
 
     /**
@@ -31,12 +38,12 @@ final class MediaStorageHttpClient
     {
         $response = $this->httpClient->request(
             'POST',
-            "$this->mediaStorageUrl/$this->uploadEndpoint",
+            $this->configurationBag->mediaStorageUrl . "/$this->uploadEndpoint",
             [
                 'body' => ['url' => $url],
             ]
         );
 
-        return new MediaUrl(json_decode($response->getContent(), true)['url']);
+        return new MediaUrl(json_decode($response->getContent(), true));
     }
 }
