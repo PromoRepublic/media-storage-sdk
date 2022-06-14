@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Promorepublic\MediaStorage;
 
 use Promorepublic\MediaStorage\Shared\MediaStorageHttpClientConfigurationBag;
-use Promorepublic\MediaStorage\Shared\MediaPath;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -34,7 +33,7 @@ final class MediaStorageHttpClient
      * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
      * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
      */
-    public function uploadFacebookImage(string $url): MediaPath
+    public function uploadFacebookImage(string $url): string
     {
         $response = $this->httpClient->request(
             'POST',
@@ -44,6 +43,7 @@ final class MediaStorageHttpClient
             ]
         );
 
-        return new MediaPath(json_decode($response->getContent(), true));
+        // Would be nice to check if 'path' key exists and throw an error if doesn't
+        return json_decode($response->getContent(), true)['path'];
     }
 }
