@@ -1,6 +1,6 @@
 <?php
 
-namespace Promorepublic\MediaStorage\Shared;
+namespace Promorepublic\MediaStorageClient\Shared;
 
 final class MediaStorageHttpClientConfigurationBag
 {
