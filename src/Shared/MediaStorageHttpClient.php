@@ -18,15 +18,18 @@ final class MediaStorageHttpClient
 
     private HttpClientInterface $httpClient;
 
-    private MediaStorageHttpClientConfigurationBag $configurationBag;
+    private string $apiKey;
 
-    public function __construct(MediaStorageHttpClientConfigurationBag $configurationBag)
+    private string $baseUrl;
+
+    public function __construct(string $apiKey, string $baseUrl = "https://media-storage.promorepublic.com0")
     {
-        $this->configurationBag = $configurationBag;
+        $this->apiKey = $apiKey;
+        $this->baseUrl = $baseUrl;
 
         $this->httpClient = HttpClient::create([
             'headers' => [
-                'x-api-key' => $configurationBag->apiKey,
+                'x-api-key' => $this->apiKey,
             ]
         ]);
     }
@@ -43,7 +46,7 @@ final class MediaStorageHttpClient
     {
         $response = $this->httpClient->request(
             'POST',
-            $this->configurationBag->mediaStorageUrl . "/$this->uploadEndpoint",
+            $this->baseUrl . "/$this->uploadEndpoint",
             [
                 'json' => ['url' => $url],
             ]
