@@ -81,7 +81,7 @@ final class MediaStorageHttpClient
          * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
          */
         private function throwResponseException(ResponseInterface $response): string
-    {
-        return $response->getContent();
-    }
+        {
+            return $response->getContent();
+        }
 }
