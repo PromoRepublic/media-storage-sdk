@@ -10,7 +10,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": "^7.4|^8.0",
-        "symfony/http-client": "^5.3",
-        "ext-json": "*"
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.4"
     }
 }
