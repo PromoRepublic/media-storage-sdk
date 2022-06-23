@@ -8,8 +8,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Promorepublic\MediaStorageClient\ExceptionConverter;
-use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageClientServerException;
-use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageClientUnknownException;
+use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageClientException;
+use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageStorageClientServerException;
+use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageStorageClientUnknownException;
 
 final class MediaStorageHttpClient
 {
@@ -33,9 +34,7 @@ final class MediaStorageHttpClient
     /**
      * @param string $url
      * @return string
-     * @throws MediaStorageClientServerException
-     * @throws MediaStorageClientUnknownException
-     * @throws \Exception
+     * @throws MediaStorageClientException
      */
     public function uploadFacebookImage(string $url): string
     {
@@ -58,9 +57,9 @@ final class MediaStorageHttpClient
             );
 
         } catch (ServerException $serverException) {
-            throw new MediaStorageClientServerException($serverException->getMessage());
+            throw new MediaStorageStorageClientServerException($serverException->getMessage());
         } catch (\Throwable $unknownException) {
-            throw new MediaStorageClientUnknownException($unknownException->getMessage());
+            throw new MediaStorageStorageClientUnknownException($unknownException->getMessage());
         }
     }
 }

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Promorepublic\MediaStorageClient;
 
 use Exception;
-use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageClientAuthException;
-use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageClientUnknownException;
-use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageClientUploadMediaValidationException;
+use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageStorageClientAuthException;
+use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageStorageClientUnknownException;
+use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageClientUploadMediaValidationExceptionStorage;
 
 final class ExceptionConverter
 {
@@ -21,14 +21,14 @@ final class ExceptionConverter
     {
         switch ($code) {
             case self::FIELDS_NOT_PROVIDED:
-                $exception = new MediaStorageClientUploadMediaValidationException($message, $code);
+                $exception = new MediaStorageClientUploadMediaValidationExceptionStorage($message, $code);
                 break;
             case self::API_KEY_NOT_PROVIDED:
             case self::API_KEY_WRONG:
-                $exception = new MediaStorageClientAuthException($message, $code);
+                $exception = new MediaStorageStorageClientAuthException($message, $code);
                 break;
             default:
-                $exception = new MediaStorageClientUnknownException($message);
+                $exception = new MediaStorageStorageClientUnknownException($message);
                 break;
         }
         return $exception;

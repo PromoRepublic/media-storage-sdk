@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Promorepublic\MediaStorageClient\Shared\Exception;
 
-class MediaStorageClientUnknownException extends \Exception implements MediaClientException
+class MediaStorageClientException extends \Exception
 {
 
 }
+

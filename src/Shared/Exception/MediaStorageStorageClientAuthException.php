@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Promorepublic\MediaStorageClient\Shared\Exception;
 
-interface MediaClientException
+class MediaStorageStorageClientAuthException extends MediaStorageClientException
 {
 
 }
