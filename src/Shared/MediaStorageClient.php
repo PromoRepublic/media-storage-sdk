@@ -12,13 +12,15 @@ use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageClientExceptio
 use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageStorageClientServerException;
 use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageStorageClientUnknownException;
 
-final class MediaStorageHttpClient
+final class MediaStorageClient
 {
     private string $uploadEndpoint = 'upload';
 
     private Client $httpClient;
 
     private string $baseUrl;
+
+    private const IMAGE_EXTENSIONS = "/(?:\.jp[e]?g|\.png|\.gif)$/i";
 
     public function __construct(string $apiKey, string $baseUrl = "https://media-storage.promorepublic.com")
     {
@@ -36,7 +38,7 @@ final class MediaStorageHttpClient
      * @return string
      * @throws MediaStorageClientException
      */
-    public function uploadFacebookImage(string $url): string
+    public function uploadImage(string $url): string
     {
         try {
             $response = $this->httpClient->request(
@@ -61,5 +63,40 @@ final class MediaStorageHttpClient
         } catch (\Throwable $unknownException) {
             throw new MediaStorageStorageClientUnknownException($unknownException->getMessage());
         }
+    }
+
+    public function findAndUploadImages(array $array): array
+    {
+        $arrayWithCashedImages = $array;
+
+        $this->uploadImagesRecursive($arrayWithCashedImages);
+
+        return $arrayWithCashedImages;
+    }
+
+    private function uploadImagesRecursive(array &$array): void
+    {
+        foreach ($array as $key => &$value) {
+            if (is_array($value)) {
+                $this->uploadImagesRecursive($value);
+            }
+
+            //the key can be int index, so it should convert that in to a string
+            if (is_string($value) && $this->validateValue($value) && $this->validateKey("$key")) {
+                $array["media_storage_$key"] = "url";
+            }
+        }
+    }
+    private function validateValue(string $string): bool
+    {
+        return 0 === strpos($string, "https") && (preg_match(
+                self::IMAGE_EXTENSIONS,
+                parse_url($string)['path'])
+            );
+    }
+
+    private function validateKey(string $key): bool
+    {
+        return 0 !== strpos($key, "media_storage");
     }
 }
