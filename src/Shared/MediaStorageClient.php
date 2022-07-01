@@ -83,7 +83,7 @@ final class MediaStorageClient
 
             //the key can be int index, so it should convert that in to a string
             if (is_string($value) && $this->validateValue($value) && $this->validateKey("$key")) {
-                $array["media_storage_$key"] = "url";
+                $array["media_storage_$key"] = $this->uploadImage($value);
             }
         }
     }
