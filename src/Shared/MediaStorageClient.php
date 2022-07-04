@@ -53,7 +53,10 @@ final class MediaStorageClient
         } catch (ClientException $clientException) {
             switch ($clientException->getResponse()->getStatusCode()) {
                 case 404:
-                    $errorResponse = ['message' => 'Not found!', 'code' => 404];
+                    $errorResponse = [
+                        'message' => 'Not found!',
+                        'code' => $clientException->getResponse()->getStatusCode()
+                    ];
                     break;
                 default:
                     $errorResponse = json_decode(
@@ -71,25 +74,25 @@ final class MediaStorageClient
         }
     }
 
-    public function findAndUploadImages(array $array): array
+    public function findAndUploadImages(array $arrayWithImages): array
     {
-        $arrayWithCashedImages = $array;
+        $arrayWithCachedImages = $arrayWithImages;
 
-        $this->uploadImagesRecursive($arrayWithCashedImages);
+        $this->uploadImagesRecursive($arrayWithCachedImages);
 
-        return $arrayWithCashedImages;
+        return $arrayWithCachedImages;
     }
 
-    private function uploadImagesRecursive(array &$array): void
+    private function uploadImagesRecursive(array &$arrayWithImages): void
     {
-        foreach ($array as $key => &$value) {
+        foreach ($arrayWithImages as $key => &$value) {
             if (is_array($value)) {
                 $this->uploadImagesRecursive($value);
             }
 
             //the key can be int index, so it should convert that in to a string
             if (is_string($value) && $this->validateValue($value) && $this->validateKey("$key")) {
-                $array["media_storage_$key"] = $this->uploadImage($value);
+                $arrayWithImages["media_storage_$key"] = $this->uploadImage($value);
             }
         }
     }

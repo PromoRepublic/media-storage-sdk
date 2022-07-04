@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Promorepublic\MediaStorageClient\Shared\Exception;
 
-class ErrorCodes
+interface ErrorCodes
 {
     public const API_KEY_NOT_PROVIDED = 10;
 

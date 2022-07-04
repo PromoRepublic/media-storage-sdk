@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Promorepublic\MediaStorageClient;
 
-use Exception;
 use Promorepublic\MediaStorageClient\Shared\Exception\ErrorCodes;
 use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageClientException;
 use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageStorageClientAuthException;
@@ -13,7 +12,7 @@ use Promorepublic\MediaStorageClient\Shared\Exception\MediaStorageClientUploadMe
 
 final class ExceptionConverter
 {
-    public static function convert(string $message, ?int $code): Exception
+    public static function convert(string $message, ?int $code): \Throwable
     {
         switch ($code) {
             case ErrorCodes::FIELDS_NOT_PROVIDED:
