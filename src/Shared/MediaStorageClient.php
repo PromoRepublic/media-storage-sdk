@@ -51,13 +51,19 @@ final class MediaStorageClient
 
             return json_decode($response->getBody()->getContents())->path;
         } catch (ClientException $clientException) {
-            $errorResponse = json_decode($clientException->getResponse()->getBody()->getContents());
-
+            switch ($clientException->getResponse()->getStatusCode()) {
+                case 404:
+                    $errorResponse = ['message' => 'Not found!', 'code' => 404];
+                    break;
+                default:
+                    $errorResponse = json_decode(
+                        $clientException->getResponse()->getBody()->getContents(),
+                        true);
+            }
             throw ExceptionConverter::convert(
-                $errorResponse->message,
-                $errorResponse->code ?? null
+                $errorResponse['message'],
+                $errorResponse['code'] ?? null
             );
-
         } catch (ServerException $serverException) {
             throw new MediaStorageStorageClientServerException($serverException->getMessage());
         } catch (\Throwable $unknownException) {
