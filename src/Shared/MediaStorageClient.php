@@ -22,15 +22,29 @@ final class MediaStorageClient
 
     private const IMAGE_EXTENSIONS = "/(?:\.jp[e]?g|\.png|\.gif)$/i";
 
-    public function __construct(string $apiKey, string $baseUrl = "https://media-storage.promorepublic.com")
+    // Guzzle waits forever by default, which hangs long-running workers on a stalled upload.
+    public const DEFAULT_TIMEOUT = 30;
+    public const DEFAULT_CONNECT_TIMEOUT = 5;
+
+    /**
+     * @param array $httpOptions Guzzle request options (e.g. timeout, connect_timeout) overriding the defaults
+     */
+    public function __construct(string $apiKey, string $baseUrl = "https://media-storage.promorepublic.com", array $httpOptions = [])
     {
         $this->baseUrl = $baseUrl;
 
-        $this->httpClient = new Client([
-            'headers' => [
-                'x-api-key' => $apiKey,
+        $this->httpClient = new Client(array_replace(
+            [
+                'timeout' => self::DEFAULT_TIMEOUT,
+                'connect_timeout' => self::DEFAULT_CONNECT_TIMEOUT,
+            ],
+            $httpOptions,
+            [
+                'headers' => [
+                    'x-api-key' => $apiKey,
+                ],
             ]
-        ]);
+        ));
     }
 
     /**

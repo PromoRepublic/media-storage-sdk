@@ -13,6 +13,13 @@ Add to composer repositories:
 
 `{"type":"git","url":"https://github.com/PromoRepublic/media-storage-sdk"}`
 
+### Timeouts
+
+Requests time out after `MediaStorageClient::DEFAULT_TIMEOUT` (30s) with a `DEFAULT_CONNECT_TIMEOUT` (5s) connect timeout; a timeout throws `MediaStorageStorageClientUnknownException`.
+Override with Guzzle options in the third constructor argument:
+
+`new MediaStorageClient($apiKey, $baseUrl, ['timeout' => 60]);`
+
 ### Public methods
 
 - `uploadMedia(string): string` to upload a media file to PR google storage
